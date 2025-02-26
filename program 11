@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define TABLE_SIZE 10
+typedef struct Symbol {
+    char name[20];
+    int value;
+    struct Symbol *next;
+} Symbol;
+unsigned int hash(char *s) {
+    unsigned int h = 0;
+    while (*s) h = (h << 5) + *s++;
+    return h % TABLE_SIZE;
+}
+void insert(Symbol *t[], char *n, int v) {
+    Symbol *s = malloc(sizeof(Symbol));
+    strcpy(s->name, n); s->value = v; s->next = t[hash(n)]; t[hash(n)] = s;
+}
+Symbol* search(Symbol *t[], const char *n) {
+    Symbol *s = t[hash(n)];
+    while (s) {
+        if (!strcmp(s->name, n)) return s;
+        s = s->next;
+    }
+    return NULL;
+}
+int main() {
+	int i;
+    Symbol *t[TABLE_SIZE] = {0};
+    insert(t, "x", 10); insert(t, "y", 20); insert(t, "z", 30);
+    Symbol *s = search(t, "y");
+    if (s) printf("%s = %d\n", s->name, s->value);
+
+    for (i = 0; i < TABLE_SIZE; i++) {
+        for (s = t[i]; s; s = s->next)
+            printf("%d: (%s, %d)\n", i, s->name, s->value);
+    }
+  return 0;
+}
