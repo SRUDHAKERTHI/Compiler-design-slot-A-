@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+char *input;
+int index = 0;
+
+int match(char expected) {
+    if (input[index] == expected) {
+        index++;
+        return 1;
+    }
+    return 0;
+}
+
+void A() {
+    if (match('a')) printf("A -> 'a'\n");
+    else if (match('b')) printf("A -> 'b'\n");
+    else printf("Error in A\n");
+}
+
+void B() {
+    if (match('c')) printf("B -> 'c'\n");
+    else if (match('d')) printf("B -> 'd'\n");
+    else printf("Error in B\n");
+}
+
+void S() {
+    printf("S -> A B\n");
+    A();
+    B();
+}
+
+int main() {
+    char input_string[100];
+    printf("Enter input: ");
+    fgets(input_string, sizeof(input_string), stdin);
+    input = input_string;
+
+    S();
+    if (input[index] == '\0') printf("Accepted\n");
+    else printf("Error at position %d\n", index);
+
+    return 0;
+}
